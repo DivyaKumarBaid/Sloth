@@ -1,10 +1,10 @@
 import uuid
 from fastapi import APIRouter, Body, HTTPException, status, Depends
 from datetime import date
-import database
+import config.database as database
 from schemas import (Comment_details, Liked,
                      Post, Inc_post, User, Del_post)
-from routes import oauth2
+from routes.auth import oauth2
 
 router = APIRouter(tags=["Posts"], prefix="/posts")
 

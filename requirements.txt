@@ -10,3 +10,4 @@ sha512-crypt==0.1.1
 sniffio==1.2.0
 typing_extensions==4.0.1
 uvicorn==0.17.1
+python-dotenv==0.21.0

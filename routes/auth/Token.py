@@ -2,15 +2,15 @@ from fastapi import HTTPException,status
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 import schemas
-import database
+import config.database as database
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
-
-
-ACCESS_TOKEN_SECRET_KEY = os.environ.get('atoken')
-REFRESH_TOKEN_SECRET_KEY = os.environ.get('rtoken')
-EMAIL_TOKEN_SECRET_KEY = os.environ.get('etoken')
-ALGORITHM = os.environ.get('algo')
+ACCESS_TOKEN_SECRET_KEY = os.getenv('ATOKEN')
+REFRESH_TOKEN_SECRET_KEY = os.getenv('RTOKEN')
+EMAIL_TOKEN_SECRET_KEY = os.getenv('ETOKEN')
+ALGORITHM = os.getenv('ALGO')
 
 
 def create_access_token(data: dict):

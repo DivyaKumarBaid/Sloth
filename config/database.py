@@ -1,10 +1,12 @@
 # mongoDB driver
 from pymongo import MongoClient
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # connection between mongodb and database.py
-client = MongoClient(os.environ.get('mongoClient'))
+client = MongoClient(os.getenv('MONGOURL'))
 
 database = client.code
 

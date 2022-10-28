@@ -1,8 +1,8 @@
 from fastapi import Depends, APIRouter, HTTPException, status
 import uuid
 from datetime import date
-import database
-from routes import oauth2
+import config.database as database
+from routes.auth import oauth2
 from schemas import (Del_code, Inc_code, Code, Code_dash, User)
 
 

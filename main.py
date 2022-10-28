@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import (Posts, Users, Login, Code)
+from routes.user import (Users)
+from routes.code import Code
+from routes.login import Login
+from routes.post import Posts
 
 app = FastAPI()
 

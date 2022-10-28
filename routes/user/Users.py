@@ -1,10 +1,11 @@
 from fastapi import Depends, APIRouter, HTTPException, status
-import database
+import config.database as database
 import uuid
+from routes.auth import oauth2
 from schemas import (BioUpdate, IntervalToken_inc, IntervalToken_ret,Pre_userdata, ResLogin, User, User_data, Userdash, Userincdash)
-import email_verification
-import hashing
-from routes import Token, oauth2
+import email_verification.email_verification as email_verification
+import routes.auth.hashing as hashing
+from routes.auth import Token
 
 
 router = APIRouter(tags=["Users"], prefix="/users")
