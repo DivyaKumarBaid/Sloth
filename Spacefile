@@ -1,0 +1,36 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: Sloth-backend
+    src: ./
+    engine: python3.9
+    primary: true
+    public_routes:
+      - "*"
+    run: uvicorn main:app
+    presets:
+      env:
+        - name: ALGO
+          description: Algo
+          default: "HS256"
+        - name: ATOKEN
+          description: ATOKEN
+          default: "h7qdsGDSr6AGg9616-VPSEP0w18vgXnMpey3JHvNPq8"
+        - name: RTOKEN
+          description: RTOKEN
+          default: "IBLGcEAxWWKQ-_Gr4rNfaH0HhvnBbZuEm_xi3clioOs"
+        - name: ETOKEN
+          description: ETOKEN
+          default: "JF_GcOWLg-Ycz_h8Bv_7PvnSCV-n_OuLsWg2HXBCtU0"
+        - name: EMAIL_ID
+          description: EMAIL_ID
+          default: "divyakumarbaid.dkb.2001@gmail.com"
+        - name: EMAIL_PASS
+          description: EMAIL_PASS
+          default: "vtthxfewbthdtrbo"
+        - name: MONGOURL
+          description: MONGOURL
+          default: "mongodb+srv://code:code@cluster0.5jyfj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+        - name: URL
+          description: URL
+          default: "https://budtrack2-1-n4007172.deta.app"
