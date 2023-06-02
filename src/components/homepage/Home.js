@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Post from "../post/Post";
 import "./home.css";
@@ -8,29 +8,29 @@ const Home = () => {
     const [Data, setData] = useState([]);
 
     useEffect(() => {
-        fetch("https://backendhackurway.herokuapp.com/posts/?limit=20")
-        .then((res) => res.json())
-        .then((res) => {
-            console.log(res);
-            setData(res);
-            setLoading(false);
-        }).catch((e) => {console.log(e)});
-    },[]);
-    
+        fetch(`${process.env.REACT_APP_BASE_URL}/posts/?limit=20`)
+            .then((res) => res.json())
+            .then((res) => {
+                console.log(res);
+                setData(res);
+                setLoading(false);
+            }).catch((e) => { console.log(e) });
+    }, []);
+
     console.log(Data);
 
-    return(
+    return (
         <>
-        <Navbar/>
-        <div className="home-component">
-            <div className="post-flow">
-                {Loading ? "Loading" : (
-                    Data.map((item,index) => {
-                        return <Post Data={item} key={index} />
-                    })
-                )}
+            <Navbar />
+            <div className="home-component">
+                <div className="post-flow">
+                    {Loading ? "Loading" : (
+                        Data.map((item, index) => {
+                            return <Post Data={item} key={index} />
+                        })
+                    )}
+                </div>
             </div>
-        </div>
         </>
     );
 };

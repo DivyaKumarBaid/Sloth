@@ -7,24 +7,24 @@ import { Link, Redirect } from "react-router-dom";
 import { Authenticator } from "../Auth/Auth";
 import "./post.css";
 
-const Post = ({Data}) => {
+const Post = ({ Data }) => {
     const [hasLiked, setLiked] = useState(false);
-    const [hasReadMore,setHasReadMore] = useState(false);
+    const [hasReadMore, setHasReadMore] = useState(false);
     const [ReadMore, setReadMore] = useState(false);
-    const [toNavigate, setNavigate] = useState(false);   
+    const [toNavigate, setNavigate] = useState(false);
     const { LoggedOut } = useContext(Authenticator);
 
     const LikeStateChanged = () => {
-        if(LoggedOut===true){
+        if (LoggedOut === true) {
             setNavigate(true);
-        }else{
+        } else {
             const payload = {
-            "author_id": window.localStorage.getItem("AuthorID"),
-            "post_id": Data.post_id,
+                "author_id": window.localStorage.getItem("AuthorID"),
+                "post_id": Data.post_id,
             }
-            fetch("https://backendhackurway.herokuapp.com/posts/like",{
+            fetch(`${process.env.REACT_APP_BASE_URL}/posts/like`, {
                 method: "POST",
-                headers:{
+                headers: {
                     'Content-Type': "application/json",
                     'Authorization': "Bearer " + window.localStorage.getItem("AccessToken"),
                 },
@@ -34,14 +34,14 @@ const Post = ({Data}) => {
         }
     }
 
-    useEffect(()=>{
-        if(Data.liked_by && Data.liked_by.includes(window.localStorage.getItem("AuthorID"))){
+    useEffect(() => {
+        if (Data.liked_by && Data.liked_by.includes(window.localStorage.getItem("AuthorID"))) {
             setLiked(true);
         }
-        if(Data.body && Data.body.length >= 1500){
+        if (Data.body && Data.body.length >= 1500) {
             setHasReadMore(true);
         }
-    },[Data.liked_by,Data.body]);
+    }, [Data.liked_by, Data.body]);
 
     const ReadStateChange = () => {
         setReadMore(!ReadMore);
@@ -61,48 +61,48 @@ const Post = ({Data}) => {
         "className": "post-icon",
     }
 
-    return(
+    return (
         <>
-        {toNavigate===true && <Redirect to="/login"/>}
-        <div className="post-card">
-            <div className="like-section">
-                {hasLiked ? <Liked {...LikeIconConfig}/> : <NotLiked {...LikeIconConfig}/>}
-                {<p className="post-counters">{Data.liked_by ? Data.liked_by.length : 0}</p>}
-                <Link to={`/post/${Data.post_id}`} children={<CommentIcon {...CommentIconConfig}/>}/>
-                {<p className="post-counters">{Data.comments ? Data.comments.length : 0}</p>}
+            {toNavigate === true && <Redirect to="/login" />}
+            <div className="post-card">
+                <div className="like-section">
+                    {hasLiked ? <Liked {...LikeIconConfig} /> : <NotLiked {...LikeIconConfig} />}
+                    {<p className="post-counters">{Data.liked_by ? Data.liked_by.length : 0}</p>}
+                    <Link to={`/post/${Data.post_id}`} children={<CommentIcon {...CommentIconConfig} />} />
+                    {<p className="post-counters">{Data.comments ? Data.comments.length : 0}</p>}
+                </div>
+                <div className="post-head">
+                    <Link to={`/profile/${Data.author_id}`} style={{ textDecoration: 'none', color: "#61dafb", width: "fit-content" }} children={
+                        <div className="author-name">{Data.author}</div>
+                    } />
+                    <div className="post-date">{Data.date}</div>
+                </div>
+                <div className="post-body">
+                    {Data.image && <img src={Data.image} alt="IDK" />}
+                    {Data.body && <p className="post-body-text">{
+                        Data.body.split("<br/>").map((text, index) => {
+                            if (hasReadMore === true) {
+                                if (ReadMore === true) return <><p>{text}</p><br /></>;
+                                else {
+                                    if (index >= 1) return null;
+                                    else return <><p>{text}</p><br /></>
+                                }
+                            } else return <><p>{text}</p><br /></>;
+                            // return <p>{text}</p>;
+                        })
+                    }</p>}
+                    {hasReadMore === true && (
+                        <p onClick={ReadStateChange} className="post-readmore">{
+                            ReadMore ? <UpArrow /> : <DownArrow />
+                        }</p>
+                    )}
+                    <div className="post-body-tags">{
+                        Data.tags && Data.tags.map((tag, index) => {
+                            return <p className="post-tag">{"#" + tag.toLowerCase()}</p>
+                        })
+                    }</div>
+                </div>
             </div>
-            <div className="post-head">
-                <Link to={`/profile/${Data.author_id}`} style={{ textDecoration: 'none', color: "#61dafb", width:"fit-content" }} children={
-                    <div className="author-name">{Data.author}</div>
-                }/>
-                <div className="post-date">{Data.date}</div>
-            </div> 
-            <div className="post-body">
-                {Data.image && <img src={Data.image} alt="IDK"/>}
-                {Data.body && <p className="post-body-text">{
-                    Data.body.split("<br/>").map((text,index) => {
-                        if(hasReadMore===true){
-                            if(ReadMore===true)return <><p>{text}</p><br/></>;
-                            else{
-                                if(index >= 1)return null;
-                                else return <><p>{text}</p><br/></>
-                            }
-                        }else return <><p>{text}</p><br/></>;
-                        // return <p>{text}</p>;
-                    })
-                }</p>}
-                {hasReadMore===true && (
-                    <p onClick={ReadStateChange} className="post-readmore">{
-                        ReadMore ? <UpArrow /> : <DownArrow />
-                    }</p>
-                )}
-                <div className="post-body-tags">{
-                    Data.tags && Data.tags.map((tag,index) => {
-                        return <p className="post-tag">{"#" + tag.toLowerCase()}</p>
-                    })
-                }</div>
-            </div>
-        </div>
         </>
     );
 };

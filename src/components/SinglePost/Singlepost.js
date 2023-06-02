@@ -12,20 +12,20 @@ const Singlepost = () => {
     const Comment_Text = useRef(null);
     const [toNavigate, setNavigate] = useState(false);
 
-    const {LoggedOut} = useContext(Authenticator);
+    const { LoggedOut } = useContext(Authenticator);
 
     useEffect(() => {
-        fetch(`https://backendhackurway.herokuapp.com/posts/${id}`)
-        .then((res) => res.json())
-        .then((res) => setData(res))
-        .catch((e) => console.log(e));
+        fetch(`${process.env.REACT_APP_BASE_URL}/posts/${id}`)
+            .then((res) => res.json())
+            .then((res) => setData(res))
+            .catch((e) => console.log(e));
         setLoading(false);
-    },[id]);
+    }, [id]);
 
     const HandlePost = () => {
-        if(LoggedOut===true){
+        if (LoggedOut === true) {
             setNavigate(true);
-        }else{
+        } else {
             console.log("Handle Post");
             const payload = {
                 "author_id": window.localStorage.getItem("AuthorID"),
@@ -33,9 +33,9 @@ const Singlepost = () => {
                 "author": window.localStorage.getItem("Author"),
                 "body": Comment_Text.current.value,
             }
-            fetch("https://backendhackurway.herokuapp.com/posts/comment",{
+            fetch(`${process.env.REACT_APP_BASE_URL}/posts/comment`, {
                 method: "POST",
-                headers:{
+                headers: {
                     'Content-Type': "application/json",
                     'Authorization': "Bearer " + window.localStorage.getItem("AccessToken"),
                 },
@@ -46,12 +46,12 @@ const Singlepost = () => {
     }
 
     return (
-        <>  
-            <Navbar/>
-            {toNavigate===true && <Redirect to="/login"/>}
-            {Loading===false && <Component Data={Data} Comment_Text={Comment_Text}
-            HandlePost={HandlePost}/>}
-            {Loading===true && "Loading"}
+        <>
+            <Navbar />
+            {toNavigate === true && <Redirect to="/login" />}
+            {Loading === false && <Component Data={Data} Comment_Text={Comment_Text}
+                HandlePost={HandlePost} />}
+            {Loading === true && "Loading"}
         </>
     );
 };
@@ -59,18 +59,18 @@ const Singlepost = () => {
 const Component = (props) => {
     useEffect(() => {
         props.Comment_Text.current.focus();
-    },[props.Comment_Text]);
+    }, [props.Comment_Text]);
 
     return (
         <div className="fullpost">
-            <Post Data={props.Data}/>
+            <Post Data={props.Data} />
             <div className="comment-section">
-                {props.Data.comments && props.Data.comments.map((comment,index) => {
-                    return <Comment {...comment} key={index}/>
+                {props.Data.comments && props.Data.comments.map((comment, index) => {
+                    return <Comment {...comment} key={index} />
                 })}
             </div>
             <div className="add-comment">
-                <textarea type="text" maxLength="500" placeHolder="Type your comment" ref={props.Comment_Text}/>
+                <textarea type="text" maxLength="500" placeHolder="Type your comment" ref={props.Comment_Text} />
                 <div className="comment-button" onClick={props.HandlePost}>Post</div>
             </div>
         </div>
@@ -78,14 +78,14 @@ const Component = (props) => {
 }
 
 const Comment = (props) => {
-    return(
+    return (
         <div className="comment">
             <div className="comment-header">
-                <Link to={`/profile/${props.author_id}`} style={{ textDecoration: "none", color: "#61dafb" }} className="comment-author" children={props.author}/>
+                <Link to={`/profile/${props.author_id}`} style={{ textDecoration: "none", color: "#61dafb" }} className="comment-author" children={props.author} />
                 <div className="comment-date">{props.date}</div>
             </div>
             <div className="comment-body">{props.body}</div>
-            
+
         </div>
     );
 }
